@@ -1,0 +1,158 @@
+#include "stdafx.h" 
+#include <iostream> 
+#include <cmath> 
+#include <string> 
+using namespace std;
+
+#define TwoPi 6.28318530717958648 
+const double eps = 1e-14;
+
+struct Cof {
+	double a, b, c;
+};
+
+class Urovneniya {//линейные вида х+а=0 
+protected:
+	double a;
+public:
+	Urovneniya() {};
+	Urovneniya(double a) { this->a = a; };
+	~Urovneniya() {};
+	virtual void Solve() {
+		cout << "Корень " << -a;
+	};
+};
+class Urovneniya2 :public Urovneniya {//квадратные вида х^2+a*x+b=0 
+protected:
+	double b;
+public:
+	Urovneniya2() {};
+	Urovneniya2(double a, double b) { this->a = a; this->b = b; };
+	~Urovneniya2() {};
+	virtual void Solve() {
+		if ((a*a - 4 * b) >= 0) {
+			cout << "Первый корень равен " << (-1 * a + sqrt(a*a - 4 * b)) / 2 << endl;
+			cout << "Второй корень равен " << (-1 * a - sqrt(a*a - 4 * b)) / 2 << endl;
+		}
+		else {
+			cout << "Дискриминант меньше 0, корни невещественные." << endl;
+		}
+	};
+};
+class Urovneniya3 :public Urovneniya2 {//кубические вида x^3+a*x^2+b*x+c=0 
+private:
+	double c;
+public:
+	Urovneniya3() {};
+	Urovneniya3(double a, double b, double c) { this->a = a; this->b = b; this->c = c; };
+	~Urovneniya3() {};
+	virtual void Solve() {
+		double a2 = a*a;
+		double q = (a2 - 3 * b) / 9;
+		double r = (a*(2 * a2 - 9 * b) + 27 * c) / 54;
+		double r2 = r*r;
+		double q3 = q*q*q;
+		double A, B;
+		if (r2<q3) {
+			double t = r / sqrt(q3);
+			if (t<-1) t = -1;
+			if (t> 1) t = 1;
+			t = acos(t);
+			a /= 3; q = -2 * sqrt(q);
+			cout << "Первый корень равен " << q*cos(t / 3) - a << endl;
+			cout << "Второй корень равен " << q*cos((t + TwoPi) / 3) - a << endl;
+			cout << "Третий корень равен " << q*cos((t - TwoPi) / 3) - a << endl;
+		}
+		else {
+			A = -pow(fabs(r) + sqrt(r2 - q3), 1. / 3);
+			if (r<0) A = -A;
+			B = A == 0 ? 0 : B = q / A;
+
+			a /= 3;
+			cout << "Первый корень равен " << (A + B) - a << endl;
+			cout << "Второй корень равен " << -0.5*(A + B) - a << endl;
+			cout << "Третий корень равен " << 0.5*sqrt(3.)*(A - B) << endl;
+		}
+	};
+};
+
+void CoofAndResh(string equation) {
+	int i = 0;
+	Cof abc;
+	abc.a = 0;
+	abc.b = 0;
+	abc.c = 0;
+	double d = 0;
+	while (i < equation.size()) {
+		if (equation[i] <= '9' && equation[i] >= '0') {
+			bool dot = false;
+			int dotstep = 0;
+			double coof = equation[i] - 48;
+			if (i > 0 && equation[i - 1] == '-')
+				coof = -coof;
+				i++;
+			if (equation[i] == '.')
+			{
+				i++;
+				dot = true;
+			}
+			while (equation[i] <= '9' && equation[i] >= '0' && i < equation.size()) {
+				if (dot == false)
+					coof = coof * 10 + (int)(equation[i] - 48);
+				else {
+					dotstep++;
+					coof = coof + (int)(equation[i] - 48) / pow(10, dotstep);
+				}
+				i++;
+				if (equation[i] == '.')
+				{
+					i++;
+					dot = true;
+				}
+			}
+			if (equation[i] == 'x' && equation[i + 1] == '^' && equation[i + 2] == '3') {
+				abc.a += coof;
+				i += 3;
+			}
+			else if (equation[i] == 'x' && equation[i + 1] == '^' && equation[i + 2] == '2') {
+				abc.b += coof;
+				i += 3;
+			}
+			else if (equation[i] == 'x') {
+				abc.c += coof;
+				i++;
+			}
+			else
+				d += coof;
+		}
+		if (equation[i] == '+' || equation[i]=='-')
+			i++;
+	}
+	cout << endl <<"a="<< abc.a << endl << "b=" << abc.b << endl << "c=" << abc.c<<endl<< "d="<< d << endl;
+	if (abc.a == 0 && abc.b==0) {
+		
+		Urovneniya ur(d/abc.c);
+		ur.Solve();
+	}
+	else if (abc.a==0) {
+		
+		Urovneniya2 ur(abc.c/abc.b, d / abc.b);
+		ur.Solve();
+	}
+	else {
+		
+		Urovneniya3 ur(abc.b/abc.a, abc.c/abc.a, d/abc.a);
+		ur.Solve();
+	}
+}
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	string urov;
+	cout << "Введите уровнение 1-3 степени:\nПримечание: Перед х обезательно должен стоит коефицыент! Без пробелов!\n";
+	cin >> urov;
+	CoofAndResh(urov);
+	_gettch();
+	return 0;
+}
