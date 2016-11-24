@@ -2,222 +2,98 @@
 #include <iostream> 
 #include <cmath> 
 #include <string> 
+#include "Equation.h"
+#include <windows.h>
+
+#define UP_ARROW 72
+#define LEFT_ARROW 75
+#define DOWN_ARROW 80
+#define RIGHT_ARROW 77
+
 using namespace std;
 
-#define TwoPi 6.28318530717958648 
-const double eps = 1e-14;
+HANDLE hConsole;
 
-struct Cof {
-	double a, b, c, d;
-};
+void gotoxy(int x, int y)
+{
+	COORD cursorLoc;
+	cursorLoc.X = x;
+	cursorLoc.Y = y;
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(hConsole, cursorLoc);
+}
 
-class Urovneniya {//линейные вида х+а=0 
-protected:
-	double a;
-public:
-	Urovneniya() {};
-	Urovneniya(double a) { this->a = a; };
-	~Urovneniya() {};
-	virtual void Solve() {
-		cout << "Корень " << -a;
-	};
-};
-class Urovneniya2 :public Urovneniya {//квадратные вида х^2+a*x+b=0 
-protected:
-	double b;
-public:
-	Urovneniya2() {};
-	Urovneniya2(double a, double b) { this->a = a; this->b = b; };
-	~Urovneniya2() {};
-	virtual void Solve() {
-		if ((a*a - 4 * b) >= 0) {
-			cout << "Первый корень = " << (-1 * a + sqrt(a*a - 4 * b)) / 2 << endl;
-			cout << "Второй корень = " << (-1 * a - sqrt(a*a - 4 * b)) / 2 << endl;
-		}
-		else {
-			cout << "Дискриминант меньше 0, корни невещественные." << endl;
-		}
-	};
-};
-class Urovneniya3 :public Urovneniya2 {//кубические вида x^3+a*x^2+b*x+c=0 
-private:
-	double c;
-public:
-	Urovneniya3() {};
-	Urovneniya3(double a, double b, double c) { this->a = a; this->b = b; this->c = c; };
-	~Urovneniya3() {};
-	virtual void Solve() {
-		double a2 = a*a;
-		double q = (a2 - 3 * b) / 9;
-		double r = (a*(2 * a2 - 9 * b) + 27 * c) / 54;
-		double r2 = r*r;
-		double q3 = q*q*q;
-		double A, B;
-		if (r2<q3) {
-			double t = r / sqrt(q3);
-			if (t<-1) t = -1;
-			if (t> 1) t = 1;
-			t = acos(t);
-			a /= 3; q = -2 * sqrt(q);
-			cout << "Первый корень = " << q*cos(t / 3) - a << endl;
-			cout << "Второй корень = " << q*cos((t + TwoPi) / 3) - a << endl;
-			cout << "Третий корень = " << q*cos((t - TwoPi) / 3) - a << endl;
-		}
-		else {
-			A = -pow(fabs(r) + sqrt(r2 - q3), 1. / 3);
-			if (r<0) A = -A;
-			B = A == 0 ? 0 : B = q / A;
-
-			a /= 3;
-			cout << "Первый корень = " << (A + B) - a << endl;
-			cout << "Второй корень = " << -0.5*(A + B) - a << endl;
-			cout << "Третий корень = " << 0.5*sqrt(3.)*(A - B) << endl;
-		}
-	};
-};
-
-void CoofAndResh(string equation) {
-	int i = 0;
-	Cof abc;
-	abc.a = 0;
-	abc.b = 0;
-	abc.c = 0;
-	abc.d = 0;
-	unsigned int L=equation.size();
-	for(i=0;i<L;i++)
-		if(equation[i]=='=' && equation[L-1]!='0' && equation[L-2]!='='){
-			cout<<"Перенесите все члены уровнения перед знак \"=\"\n";
-			system("Pause");
-			exit(0);
-		}
-		else if(equation[L-1]=='0' && equation[L-2]=='=')
-			L-=2;
-	
-	
-	i=0;
-	while (i < L) {
-		if (equation[i] <= '9' && equation[i] >= '0') {
-			bool dot = false;
-			int dotstep = 0;
-			double coof = equation[i] - 48;
-			if (i > 0 && equation[i - 1] == '-')
-				coof = -coof;
-				i++;
-			if (equation[i] == '.')
-			{
-				i++;
-				dot = true;
-			}
-			while (equation[i] <= '9' && equation[i] >= '0' && i < L) {
-				if (dot == false && coof>=0)
-					coof = coof * 10 + (int)(equation[i] - 48);
-				else if(coof>=0){
-					dotstep++;
-					coof = coof + (int)(equation[i] - 48) / pow(10., dotstep);//Округливает?!?!?
-				}
-				if (dot == false && coof<0)
-					coof = coof * 10 - (int)(equation[i] - 48);
-				else if(coof<0) {
-					dotstep++;
-					coof = coof - (int)(equation[i] - 48) / pow(10., dotstep);//Округливает?!?!?
-				}
-				i++;
-				if (equation[i] == '.')
-				{
-					i++;
-					dot = true;
-				}
-			}
-			if(equation[i]=='*')
-				i++;
-			if (equation[i] == 'x' && equation[i + 1] == '^' && equation[i + 2] == '3') {
-				abc.a += coof;
-				i += 3;
-			}
-			else if (equation[i] == 'x' && equation[i + 1] == '^' && equation[i + 2] == '2') {
-				abc.b += coof;
-				i += 3;
-			}
-			else if (equation[i] == 'x') {
-				abc.c += coof;
-				i++;
-			}
+void MENU()
+{
+	system("CLS");
+	gotoxy(10, 0);
+	cout << "MathHelper";
+	gotoxy(1, 1);
+	cout << "Solve Equation";
+	gotoxy(1, 2);
+	cout << "MATRIX";
+	gotoxy(1, 3);
+	cout << "HTML-tags test";
+	gotoxy(1, 4);
+	cout << "EXIT";
+	int i = 1;
+	int KeyStroke;
+	gotoxy(0, i);
+	cout << '>';
+	do
+	{
+		KeyStroke = _gettch();
+		gotoxy(0, i);
+		cout << ' ';
+		switch (KeyStroke)
+		{
+		case UP_ARROW:
+			if (i == 1)
+				i = 4;
 			else
-				abc.d += coof;
-		}
-		if (equation[i] == '+'){
-			i++;
-			if (equation[i] == 'x' && equation[i + 1] == '^' && equation[i + 2] == '3') {
-				abc.a ++;
-				i += 3;
-			}
-			else if (equation[i] == 'x' && equation[i + 1] == '^' && equation[i + 2] == '2') {
-				abc.b ++;
-				i += 3;
-			}
-			else if (equation[i] == 'x') {
-				abc.c ++;
+				i--;
+			break;
+		case DOWN_ARROW:
+			if (i == 4)
+				i = 1;
+			else
 				i++;
-			}
+			break;
 		}
-		else if(equation[i]=='-'){
-			i++;
-			if (equation[i] == 'x' && equation[i + 1] == '^' && equation[i + 2] == '3') {
-				abc.a --;
-				i += 3;
-			}
-			else if (equation[i] == 'x' && equation[i + 1] == '^' && equation[i + 2] == '2') {
-				abc.b --;
-				i += 3;
-			}
-			else if (equation[i] == 'x') {
-				abc.c --;
-				i++;
-			}
+		gotoxy(0, i);
+		cout << '>';
+	} while (KeyStroke != VK_RETURN);
+	string urov;
+	system("cls");
+	switch (i)
+	{
+	case 1:
+		setlocale(LC_ALL, "Russian");
+		cout << "Введите уровнение 1-3 степени\nВ формате f(x)=0 (Перенесите все члены уровнения перед знак \"=\")\n";
+		cin >> urov;
+		CoofAndResh(urov);
+		cout << endl << "Нажмите пробел для решения следующего уровнения."<<endl;
+		cout << "Нажмите любую другую клавишу для возврата в меню."<<endl;
+		while(_gettch()==' '){
+			cout<<"Введите уровнение:";
+			cin >> urov;
+			CoofAndResh(urov);
 		}
-		else{
-			if (equation[i] == 'x' && equation[i + 1] == '^' && equation[i + 2] == '3') {
-				abc.a ++;
-				i += 3;
-			}
-			else if (equation[i] == 'x' && equation[i + 1] == '^' && equation[i + 2] == '2') {
-				abc.b ++;
-				i += 3;
-			}
-			else if (equation[i] == 'x') {
-				abc.c ++;
-				i++;
-			}
-			}
-	}
-	//cout << endl <<"a="<< abc.a << endl << "b=" << abc.b << endl << "c=" << abc.c<<endl<< "d="<< abc.d << endl;
-	if (abc.a == 0 && abc.b==0) {
-		cout<<endl<<equation<<" - Линейное уровнение\n\n";
-		if(abc.c!=0){
-		Urovneniya ur(abc.d/abc.c);
-		ur.Solve();
-		}
-		else cout<<"Х-Любое число\n";
-	}
-	else if (abc.a==0) {
-		cout<<endl<<equation<<" - Квадратное уровнение\n\n";
-		Urovneniya2 ur(abc.c/abc.b, abc.d / abc.b);
-		ur.Solve();
-	}
-	else {
-		cout<<endl<<equation<<" - Кубическое уровнение\n\n";
-		Urovneniya3 ur(abc.b/abc.a, abc.c/abc.a, abc.d/abc.a);
-		ur.Solve();
+		MENU();
+		break;
+	case 2:
+		
+		break;
+	case 3:
+		
+		break;
+	case 4:
+		exit(0);
 	}
 }
 
 int main()
 {
-	setlocale(LC_ALL, "Russian");
-	string urov;
-	cout << "Введите уровнение 1-3 степени\nВ формате f(x)=0(Перенесите все члены уровнения перед знак \"=\")\n";
-	cin >> urov;
-	CoofAndResh(urov);
-	_gettch();
+	MENU();
 	return 0;
 }
