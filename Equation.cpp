@@ -2,6 +2,7 @@
 #include <iostream> 
 #include <cmath> 
 #include <string> 
+#include <windows.h>
 using namespace std;
 
 #define TwoPi 6.28318530717958648 
@@ -77,7 +78,7 @@ public:
 };
 
 void CoofAndResh(string equation) {
-	int i = 0;
+	int i = 0,oblom=0;
 	Cof abc;
 	abc.a = 0;
 	abc.b = 0;
@@ -189,24 +190,34 @@ void CoofAndResh(string equation) {
 				i++;
 			}
 			}
+		oblom++;
+		if (oblom > L) {
+			cout << "Уровнение некоректно!"<<endl;
+			cout << "Программа самозакроется через " << 5 << " Секунд!" <<endl;
+			for (int s = 4; s >= 0; s--) {
+				Sleep(1000);
+				cout << "Программа самозакроется через "<< s << " Секунд!"<<endl;
+			}
+			exit(0);
+
+		}
 	}
 	//cout << endl <<"a="<< abc.a << endl << "b=" << abc.b << endl << "c=" << abc.c<<endl<< "d="<< abc.d << endl;
+	Equation* ur=NULL;
 	if (abc.a == 0 && abc.b==0) {
 		cout<<endl<<equation<<" - Линейное уровнение\n\n";
 		if(abc.c!=0){
-		Equation ur(abc.d/abc.c);
-		ur.Solve();
+		ur = new Equation(abc.d/abc.c);
 		}
 		else cout<<"Х-Любое число\n";
 	}
 	else if (abc.a==0) {
 		cout<<endl<<equation<<" - Квадратное уровнение\n\n";
-		Equation2 ur(abc.c/abc.b, abc.d / abc.b);
-		ur.Solve();
+		ur = new Equation2(abc.c/abc.b, abc.d / abc.b);
 	}
 	else {
 		cout<<endl<<equation<<" - Кубическое уровнение\n\n";
-		Equation3 ur(abc.b/abc.a, abc.c/abc.a, abc.d/abc.a);
-		ur.Solve();
+		ur = new Equation3(abc.b/abc.a, abc.c/abc.a, abc.d/abc.a);
 	}
+	ur->Solve();
 }
