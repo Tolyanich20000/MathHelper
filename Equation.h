@@ -1,10 +1,8 @@
 #pragma once
 #include "stdafx.h" 
-#include <iostream> 
-#include <cmath> 
-#include <string> 
-using namespace std;
 
+using namespace std;
+namespace yrov{
 #define TwoPi 6.28318530717958648 
 const double eps = 1e-14;
 
@@ -42,3 +40,4 @@ public:
 
 void CoofAndResh(string equation);
 
+}

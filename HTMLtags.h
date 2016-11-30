@@ -1,9 +1,5 @@
 #pragma once 
-#include "stdafx.h" 
-#include "HTMLtags.h" 
-#include <fstream> 
-#include <iostream> 
-#include <string> 
+#include "stdafx.h"  
 
 using namespace std;
 
@@ -39,4 +35,3 @@ protected:
 	friend void TagsTest(string adres);
 };
 
-void TagsTest(string adres);
