@@ -4,59 +4,81 @@
 using namespace std;
 using namespace tags;
 
+string ClosedPairedMass[] = { "</a>","</abbr>","</address>","</acronym>","</applet>","</article>","</aside>"," </audio>",
+"</b>","</bdi>","</bdo>","</big>","</blink>","</blockquote>","</body>","</button>","</canvas>","</caption>","</center>",
+"</cite>","</code>","</colgroup>","</comment>","</datalist>","</dd>","</del>","</details>","</dfn>","</dialog>",
+"</dir>" ,"</div>" ,"</dl>","</dt>","</em>","</fieldset>" ,"</figcaption>","</figure>","</font>","</footer>","</form>",
+"</frame>","</frameset>","</h*>","</head>","</header>","</hgroup>","</html>","</i>","</iframe>","</ins>","</kbd>","</label>",
+"</legend>","</li>","</listing>","</map>","</mark>","</marquee>","</menu>","</meter>","</multicol>","</nav>","</nobr>"
+,"</noembed>","</noframes>","</noscript>","</object>","</ol>","</optgroup>","</option>","</output>","</p>","</plaintext>",
+"</pre>","</progress>","</q>","</rp>","</rt>","</ruby>","</s>","</samp>","</script>","</section>","</select>","</small>",
+"</spacer>","</span>","</strike>","</strong>","</style>","</sub>","</summary>","</sup>","</table>","</tbody>","</td>",
+"</textarea>","</tfoot>","</th>","</thead>","</time>" ,"</title>","</tr>","</tt>","</u>","</ul>","</var>","</video>" ,"</xmp>" };
+string PairedMass[] = { "<a>","<abbr>","<address>","<acronym>","<applet>","<article>","<aside>","<audio>","<b>",
+"<bdi>","<bdo>","<big>","<blink>","<blockquote>","<body>","<button>","<canvas>","<caption>","<center>","<cite>",
+"<code>","<colgroup>","<comment>","<datalist>","<dd>","<del>","<details>","<dfn>", "<dialog>","<dir>","<div>","<dl>",
+"<dt>","<em>","<fieldset>","<figcaption>","<figure>","<font>","<footer>","<form>","<frame>","<frameset>","<h*>","<head>",
+"<header>","<hgroup>","<html>","<i>","<iframe>","<ins>","<kbd>","<label>" ,"<legend>" ,"<li>" ,
+"<listing>","<map>" ,"<mark>","<marquee>","<menu>","<meter>","<multicol>","<nav>","<nobr>","<noembed>","<noframes>"
+,"<noscript>","<object>","<ol>","<optgroup>","<option>","<output>","<p>","<plaintext>","<pre>","<progress>","<q>" ,"<rp>",
+"<rt>" ,"<ruby>" ,"<s>" ,"<samp>" ,"<script>" ,"<section>" ,"<select>" ,"<small>" ,"<spacer>" ,"<span>" ,"<strike>" ,
+"<strong>" ,"<style>" ,"<sub>" ,"<summary>" ,"<sup>" ,"<table>" ,"<tbody>" ,"<td>" ,"<textarea>" ,"<tfoot>" ,"<th>" ,"<thead>" ,
+"<time>" ,"<title>" ,"<tr>" ,"<tt>" ,"<u>" ,"<ul>" ,"<var>" ,"<video>" ,"<xmp>" };
+string singleclosedmass[] = { "</area>", "</base>", "</basefont>", "</bgsound>", "</br>", "</col>", "</command>", "</embed>", "</hr>", "</img>", "</input>", "</isindex>", "</keygen>", "</link>", "</meta>", "</param>", "</source>", "</track>", "</wbr>" };
+string singlemass[] = { "<area>","<base>","<basefont>","<bgsound>","<br>","<col>","<command>","<embed>","<hr>","<img>","<input>","<isindex>","<keygen>","<link>","<meta>","<param>","<source>","<track>","<wbr>" };
+string code;
+
 int pairedtags::is_close(int poz, int ind) {
 		if(poz==-1){
 		return -1;
 		}
 		string buf;
-		bool ex = true;
+		bool ex = false;
 		while (poz < code.size()) {
-			poz++;
-			int j = poz;
 			if (code[poz] == '<') {
 				buf.clear();
-
 				do{
 					buf.push_back(code[poz]);
 					poz++;
 				}while (code[poz-1] != '>' && poz < code.size());
-
+					int j=0;
 					while (j < 109 && buf != PairedMass[j]) {
 						j++;
 						if (j < 109 && buf == PairedMass[j]) {
-							return is_close(poz,j); ex = true;
+							poz=is_close(poz, j);
+							ex = true; break;
 						}
 					};
-					if (buf == ClosedPairedMass[ind])
-						return poz;
-					else
-						return -1;
 					j = 0;
 					while (j < 19 && buf != singlemass[j]) {
 						j++;
 						if (j < 19 && buf == singlemass[j]) {
-							ex = true;
+							ex = true; break;
 						}
 					};
 					j = 0;
 					while (j < 19 && buf != singleclosedmass[j]) {
 						j++;
 						if (j < 19 && buf == singleclosedmass[j]) {
-							ex = true;
+							ex = true; break;
 						}
 					};
+					if (buf == ClosedPairedMass[ind])
+						return poz;
 					if (!ex) {
-						cout << buf <<"Incorect!"<<endl;
+						cout << buf << "Incorect!" << endl;
+						system("Pause");
 						return -1;
 					}
 			}
+			poz++;
 		}
 		return -1;
 	};
 
 
 
-void TagsTest(string adres)
+void tags::TagsTest(string adres)
 {
 	string buf;
 	ifstream HTMLcode(adres);
@@ -65,9 +87,9 @@ void TagsTest(string adres)
 		code.append(buf);
 	}
 	else{
-		cout<<"Incorect adres!";
-		_gettch();
-		exit(0);
+		cout<<"Incorect adres!"<<endl;
+		system("Pause");
+		return;
 	}
 	HTMLcode.close();
 	int i = 0;
@@ -84,32 +106,34 @@ void TagsTest(string adres)
 			while (j < 19 && buf != singlemass[j]) {
 				j++;
 				if (j < 19 && buf == singlemass[j]){
-					nom = 1; ex = true;ind=j; 
+					nom = 1; ex = true;ind=j; break;
 				} 
 			};
 			j = 0;
 			while (j < 19 && buf != singleclosedmass[j]) {
 				j++;
 				if (j < 19 && buf == singleclosedmass[j]){
-					nom = 2; ex = true;ind=j; 
+					nom = 2; ex = true;ind=j; break;
 				}
 			};
 			j = 0;
 			while (j < 109 && buf != PairedMass[j]) {
 				j++; 
 				if (j < 109 && buf == PairedMass[j]) {
-					nom = 3; ex = true;ind=j; 
+					nom = 3; ex = true;ind=j; break;
 				}
 			};
 			j = 0;
 			while (j < 109 && buf != ClosedPairedMass[j]) {
 				j++; 
 				if (j < 109 && buf == ClosedPairedMass[j]){
-					nom = 4; ex = true;ind=j;  
+					nom = 4; ex = true;ind=j;  break;
 				}
 			};
 			if (!ex) {
 				cout << buf << " Incorect!" << endl;
+				system("Pause");
+				return;
 			}
 			switch (nom)
 			{
@@ -120,11 +144,15 @@ void TagsTest(string adres)
 			case 3:
 				i = pairedtags::is_close(i,ind);
 				if(i==-1){
-				cout<<buf<<" Unclosed!";
+				cout<<buf<<" Unclosed!"<<endl;
+				system("Pause");
+				return;
 				}
 				break;
 			case 4:
 				cout << buf << " Incorect Closed tag!" << endl;
+				system("Pause");
+				return;
 				break;
 			default:
 				break;

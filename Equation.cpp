@@ -53,7 +53,7 @@ void Equation3::Solve() {
 		}
 	};
 
-void CoofAndResh(string equation) {
+void yrov::CoofAndResh(string equation) {
 	int g = 0,oblom=0;
 	Cof abc;
 	abc.a = 0;
