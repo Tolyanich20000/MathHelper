@@ -1,6 +1,5 @@
-﻿#include "stdafx.h" 
+#include "stdafx.h" 
 #include "Equation.h"
-#include "Matrex.h"
 #include "HTMLtags.h"
 
 #define UP_ARROW 72
@@ -29,10 +28,8 @@ void MENU()
 	gotoxy(1, 1);
 	cout << "Solve Equation";
 	gotoxy(1, 2);
-	cout << "MATRIX";
-	gotoxy(1, 3);
 	cout << "HTML-tags test";
-	gotoxy(1, 4);
+	gotoxy(1, 3);
 	cout << "EXIT";
 	int i = 1;
 	int KeyStroke;
@@ -47,12 +44,12 @@ void MENU()
 		{
 		case UP_ARROW:
 			if (i == 1)
-				i = 4;
+				i = 3;
 			else
 				i--;
 			break;
 		case DOWN_ARROW:
-			if (i == 4)
+			if (i == 3)
 				i = 1;
 			else
 				i++;
@@ -61,39 +58,61 @@ void MENU()
 		gotoxy(0, i);
 		cout << '>';
 	} while (KeyStroke != VK_RETURN);
-	string urov,adres;
+	string urov, adres;
+	setlocale(LC_ALL, "Russian");
 	system("cls");
+	double m=0;
+	int d=0;
 	switch (i)
 	{
 	case 1:
-		setlocale(LC_ALL, "Russian");
-		cout << "Введите уровнение 1-3 степени\nВ формате f(x)=0 (Перенесите все члены уровнения перед знак \"=\")\n";
-		cin >> urov;
-		yrov::CoofAndResh(urov);
-		cout << "Нажмите любую другую клавишу для решения следующего уровнения."<<endl;
-		cout << endl << "Нажмите пробел для возврата в меню."<<endl;
-		while(_gettch()!=' '){
-			cout<<"Введите уровнение:";
+		cout<<"Любая другая клавиша) Вернутса в меню\n1) Решыть уровнение\n2) Извлечь квадратный корень из числа\n3) Вознести в степень\n";
+		switch (_gettch()){
+			system("cls");
+		case 48:
+			break;
+		case 49:
+			cout << "Введите уровнение 1-3 степени\nВ формате f(x)=0 (Перенесите все члены уровнения перед знак \"=\")\n";
 			cin >> urov;
 			yrov::CoofAndResh(urov);
+			cout << "Нажмите любую другую клавишу для решения следующего уровнения." << endl;
+			cout << endl << "Нажмите пробел для возврата в меню." << endl;
+			while (_gettch() != ' ') {
+				cout << "Введите уровнение:";
+				cin >> urov;
+				yrov::CoofAndResh(urov);
+			}
+			break;
+		case 50:
+			cout<<"Введите число: ";
+			cin>>m;
+			cout<<"\nКорень "<<m<<" = "<<sqrt(m)<<endl;
+			_gettch();
+			break;
+		case 51:
+			cout<<"Введите число: ";
+			cin>>m;
+			cout<<"Введите степень: ";
+			cin>>d;
+			cout<<endl<<m<<"^"<<d<<" = "<<pow(m,d)<<endl;
+			_gettch();
+			break;
 		}
-		MENU();
 		break;
 	case 2:
-		Mat();
+		cout << "Введите полный адрес файла(.txt) для проверки: " << endl;
+		cin >> adres;
+		tags::pairedtags::TagsTest(adres);
 		break;
 	case 3:
-		cin>>adres;
-		tags::TagsTest(adres);
-		_gettch();
-		break;
-	case 4:
 		exit(0);
 	}
 }
 
 int main()
 {
-	MENU();
+	while(true){
+		MENU();
+	}
 	return 0;
 }
