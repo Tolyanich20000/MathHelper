@@ -64,13 +64,11 @@ void yrov::CoofAndResh(string equation) {
 	for(g=0;g<L;g++)
 		if(equation[g]=='=' && equation[L-1]!='0' && equation[L-2]!='='){
 			cout<<"Перенесите все члены уровнения перед знак \"=\"\n";
-			system("Pause");
-			exit(0);
+			_gettch();
+			return;
 		}
 		else if(equation[L-1]=='0' && equation[L-2]=='=')
 			L-=2;
-	
-	
 	g=0;
 	while (g < L) {
 		if (equation[g] <= '9' && equation[g] >= '0') {
@@ -105,7 +103,7 @@ void yrov::CoofAndResh(string equation) {
 					dot = true;
 				}
 			}
-			if(equation[g]=='*')
+			if(equation[g]=='*' || equation[g]==' ')
 				g++;
 			if (equation[g] == 'x' && equation[g + 1] == '^' && equation[g + 2] == '3') {
 				abc.a += coof;
@@ -169,13 +167,8 @@ void yrov::CoofAndResh(string equation) {
 		oblom++;
 		if (oblom > L) {
 			cout << "Уровнение НЕКОРЕКТНО!"<<endl;
-			cout << "Программа самозакроется через " << 5 << " Секунд!" <<endl;
-			for (int s = 4; s >= 0; s--) {
-				Sleep(1000);
-				cout << "Программа самозакроется через " << s << " Секунд!" <<endl;
-			}
-			exit(0);
-
+			_gettch();
+			return;
 		}
 	}
 	//cout << endl <<"a="<< abc.a << endl << "b=" << abc.b << endl << "c=" << abc.c<<endl<< "d="<< abc.d << endl;
