@@ -1,254 +1,101 @@
 #include "stdafx.h" 
 #include "HTMLtags.h"
 
-#define SIZE 120
+#define PairSIZE 105
+#define SingleSIZE 21
 
 using namespace std;
 using namespace tags;
 
-string ClosedPairedMass[] = { "</comment>","</DOCTYPE>","</a>","</abbr>", 
-"</acronym>", 
-"</address>", 
-"</applet>" , 
-"</area>", 
-"</article>", 
-"</aside>", 
-"</audio>", 
-"</b>", 
-"</base>", 
-"</basefont>", 
-"</bdo>", 
-"</big>", 
-"</blockquote>", 
-"</body>", 
-"</br>", 
-"</button>", 
-"</canvas>", 
-"</caption>", 
-"</center>", 
-"</cite>", 
-"</code>", 
-"</col>", 
-"</colgroup>", 
-"</command>", 
-"</datagrid>", 
-"</datalist>", 
-"</datatemplate>", 
-"</dd>", 
-"</del>", 
-"</details>", 
-"</dialog>", 
-"</dir>", 
-"</div>", 
-"</dfn>", 
-"</dl>", 
-"</dt>", 
-"</em>", 
-"</embed>", 
-"</eventsource>", 
-"</fieldset>", 
-"</figure>", 
-"</font>", 
-"</footer>", 
-"</form>", 
-"</frame>", 
-"</frameset>", 
-"</h1>", "</h2>","</h3>","</h4>","</h5>", "</h6>", 
-"</head>", 
-"</header>", 
-"</hr>", 
-"</html>", 
-"</i>", 
-"</iframe>", 
-"</img>", 
-"</input>", 
-"</ins>", 
-"</isindex>", 
-"</kbd>", 
-"</label>", 
-"</legend>", 
-"</li>", 
-"</link>", 
-"</mark>", 
-"</map>", 
-"</menu>", 
-"</meta>", 
-"</meter>", 
-"</nav>", 
-"</nest>", 
-"</noframes>", 
-"</noscript>", 
-"</object>" , 
-"</ol>", 
-"</optgroup>", 
-"</option>", 
-"</output>", 
-"</p>", 
-"</param>", 
-"</pre>", 
-"</progress>", 
-"</q>", 
-"</rule>", 
-"</s>", 
-"</samp>", 
-"</script>", 
-"</section>", 
-"</select>", 
-"</small>", 
-"</source>", 
-"</span>", 
-"</strike>", 
-"</strong>", 
-"</style>", 
-"</sub>", 
-"</sup>", 
-"</table>", 
-"</tbody>", 
-"</td>", 
-"</textarea>", 
-"</tfoot>", 
-"</th>", 
-"</thead>", 
-"</time>", 
-"</title>", 
-"</tr>", 
-"</tt>", 
-"</u>", 
-"</ul>", 
-"</var>", 
-"</video>", 
-"</xmp>" };
-string PairedMass[] = { "<comment>","<DOCTYPE>","<a>","<abbr>", 
-"<acronym>", 
-"<address>", 
-"<applet>" , 
-"<area>", 
-"<article>", 
-"<aside>", 
-"<audio>", 
-"<b>", 
-"<base>", 
-"<basefont>", 
-"<bdo>", 
-"<big>", 
-"<blockquote>", 
-"<body>", 
-"<br>", 
-"<button>", 
-"<canvas>", 
-"<caption>", 
-"<center>", 
-"<cite>", 
-"<code>", 
-"<col>", 
-"<colgroup>", 
-"<command>", 
-"<datagrid>", 
-"<datalist>", 
-"<datatemplate>", 
-"<dd>", 
-"<del>", 
-"<details>", 
-"<dialog>", 
-"<dir>", 
-"<div>", 
-"<dfn>", 
-"<dl>", 
-"<dt>", 
-"<em>", 
-"<embed>", 
-"<eventsource>", 
-"<fieldset>", 
-"<figure>", 
-"<font>", 
-"<footer>", 
-"<form>", 
-"<frame>", 
-"<frameset>", 
-"<h1>", "<h2>","<h3>","<h4>","<h5>", "<h6>", 
-"<head>", 
-"<header>", 
-"<hr>", 
-"<html>", 
-"<i>", 
-"<iframe>", 
-"<img>", 
-"<input>", 
-"<ins>", 
-"<isindex>", 
-"<kbd>", 
-"<label>", 
-"<legend>", 
-"<li>", 
-"<link>", 
-"<mark>", 
-"<map>", 
-"<menu>", 
-"<meta>", 
-"<meter>", 
-"<nav>", 
-"<nest>", 
-"<noframes>", 
-"<noscript>", 
-"<object>" , 
-"<ol>", 
-"<optgroup>", 
-"<option>", 
-"<output>", 
-"<p>", 
-"<param>", 
-"<pre>", 
-"<progress>", 
-"<q>", 
-"<rule>", 
-"<s>", 
-"<samp>", 
-"<script>", 
-"<section>", 
-"<select>", 
-"<small>", 
-"<source>", 
-"<span>", 
-"<strike>", 
-"<strong>", 
-"<style>", 
-"<sub>", 
-"<sup>", 
-"<table>", 
-"<tbody>", 
-"<td>", 
-"<textarea>", 
-"<tfoot>", 
-"<th>", 
-"<thead>", 
-"<time>", 
-"<title>", 
-"<tr>", 
-"<tt>", 
-"<u>", 
-"<ul>", 
-"<var>", 
-"<video>", 
-"<xmp>" };
-string singleclosedmass[] = { "</area>", "</base>", "</basefont>", "</bgsound>", "</br>", "</col>", "</command>", "</embed>", "</hr>", "</img>", "</input>", "</isindex>", "</keygen>", "</link>", "</meta>", "</param>", "</source>", "</track>", "</wbr>" };
-string singlemass[] = { "<area>","<base>","<basefont>","<bgsound>","<br>","<col>","<command>","<embed>","<hr>","<img>","<input>","<isindex>","<keygen>","<link>","<meta>","<param>","<source>","<track>","<wbr>" };
+string ClosedPairedMass[] = { "</comment>","</a>","</abbr>", 
+"</acronym>","</b>",  		 "</canvas>",  "</datagrid>", 
+"</address>",			  	 "</caption>", "</datalist>", 
+"</applet>" ,				 "</center>",  "</datatemplate>",
+			 "</bdo>", 		 "</cite>",    "</dd>", 
+"</article>","</big>",  	 "</code>",    "</del>", 
+"</aside>",  "</blockquote>",			   "</details>", 
+"</audio>",  "</body>", 	 "</colgroup>","</dialog>",  
+							 "</command>", "</dir>",
+			 "</button>", 				   "</div>", 
+										   "</dfn>", 
+										   "</dl>", 
+										   "</dt>", 
+"</em>", 		 "</fieldset>","</h1>",  	"</i>", 				 "</mark>", 
+			 	 "</figure>",  "</h2>",		"</iframe>", "</kbd>", 	 "</map>", 
+"</eventsource>","</font>",    "</h3>",				 	 "</label>", "</menu>", 
+				 "</footer>",  "</h4>",					 "</legend>",  
+				 "</form>",    "</h5>",		"</ins>", 	 "</li>", 	 "</meter>",
+				 "</frame>",   "</h6>", 	"</isindex>",
+				 "</frameset>","</head>",  
+							   "</header>", 
+							   "</html>", 
+"</nav>", 	  "</object>" , "</p>", 	  "</s>", 	   "</table>", 	 "</u>", 
+"</nest>", 	  "</ol>", 					  "</samp>",   "</tbody>", 	 "</ul>", 
+"</noframes>","</optgroup>","</pre>",  	  "</script>", "</td>", 	 "</var>", 
+"</noscript>","</option>",  "</progress>","</section>", 			 "</video>",
+			  "</output>", 	"</q>", 	  "</select>", "</tfoot>", 	 "</xmp>"   
+							"</rule>", 	  "</small>",  "</th>", 
+										  "</svg>",	   "</thead>", 
+										  "</span>",   "</time>", 
+										  "</strike>", "</title>", 
+ 										  "</strong>", "</tr>", 
+										  "</style>",  "</tt>", 
+										  "</sub>", 
+										  "</sup>", 
+};
+string PairedMass[] = { "<comment>","<a>","<abbr>", 
+"<acronym>","<b>",  		 "<canvas>",  "<datagrid>", 
+"<address>",			  	 "<caption>", "<datalist>", 
+"<applet>" ,			 "<center>",  "<datatemplate>",
+		 	"<bdo>", 		 "<cite>",    "<dd>", 
+"<article>","<big>",  	 "<code>",    "<del>", 
+"<aside>",  "<blockquote>",			   "<details>", 
+"<audio>",  "<body>", 	 "<colgroup>","<dialog>",  
+							 "<command>", "<dir>",
+			 "<button>", 				   "<div>", 
+										   "<dfn>", 
+										   "<dl>", 
+										   "<dt>", 
+"<em>", 		 "<fieldset>","<h1>",  	"<i>", 				 "<mark>", 
+			 	 "<figure>",  "<h2>",		"<iframe>", "<kbd>", 	 "<map>", 
+"<eventsource>","<font>",    "<h3>",				 	 "<label>", "<menu>", 
+				 "<footer>",  "<h4>",					 "<legend>", 
+				 "<form>",    "<h5>",		"<ins>", 	 "<li>", 	 "<meter>",
+				 "<frame>",   "<h6>", 	"<isindex>",
+				 "<frameset>","<head>",  
+							   "<header>", 
+							   "<html>", 
+"<nav>", 	  "<object>" , "<p>", 	  "<s>", 	   "<table>", 	 "<u>", 
+"<nest>", 	  "<ol>", 				  "<samp>",   "<tbody>", 	 "<ul>", 
+"<noframes>","<optgroup>","<pre>",  	  "<script>", "<td>", 	 "<var>", 
+"<noscript>","<option>",  "<progress>","<section>",				"<video>",
+			  "<output>", 	"<q>", 	  "<select>", "<tfoot>", 	 "<xmp>"   
+							"<rule>", 	  "<small>",  "<th>", 
+										  "<svg>",	  "<thead>", 
+										  "<span>",   "<time>", 
+										  "<strike>", "<title>", 
+ 										  "<strong>", "<tr>", 
+										  "<style>",  "<tt>", 
+										  "<sub>", 
+										  "<sup>",
+};
+string singlemass[] = { "<!DOCTYPE>","<area>","<base>","<basefont>","<bgsound>","<br>","<col>","<command>","<embed>","<hr>","<img>","<input>","<isindex>","<keygen>","<link>","<meta>","<param>","<source>","<track>","<wbr>" };
 string code;
-
-
-
-
 
 void pairedtags::TagsTest(string adres)
 {
-	int pairs[SIZE] = { 0 };
+	vector<pair<string,int>> incor;
+	int pairs[PairSIZE] = { 0 };
+	int fails[PairSIZE]={0};
 	string buf;
+	char scan[1000000];
 	bool fl = false;
 	ifstream HTMLcode;
 	HTMLcode.open(adres);
 	if (HTMLcode.is_open()){
 		code.clear();
-		while (HTMLcode >> buf)
-			code.append(buf);
+		while (HTMLcode.getline(scan,1000000))
+			code.append(scan);
 	}
 	else{
 		cout << "Incorect adres!" << endl;
@@ -257,27 +104,30 @@ void pairedtags::TagsTest(string adres)
 	}
 	HTMLcode.close();
 	//*********************************************
-	int i = 0;
+	long long int i = 0;
 	while (i < code.size()) {
 
-		if (code[i] == '<') {
+		if (code[i] == '<' && code[i+1] != '!' && code[i+2] != '-' && code[i+3] != '-') {
 			buf.clear();
 			do {
 				buf.push_back(code[i]);
 				i++;
+				if(code[i]==' '){
+				code[i]='>';
+				}
 			} while (code[i - 1] != '>' && i < code.size());
 
 			int j = 0;
 			bool ex = false;
 
-			while (j < 19) {
-				if (buf == singlemass[j] && buf == singleclosedmass[j]){
+			while (j < SingleSIZE) {
+				if (buf == singlemass[j]){
 					ex = true; break;
 				}
 				j++;
 			};
 			j = 0;
-			while (j < SIZE) {
+			while (j < PairSIZE) {
 				if (buf == PairedMass[j]) {
 					ex = true;
 					pairs[j]++;
@@ -291,23 +141,39 @@ void pairedtags::TagsTest(string adres)
 				j++;
 			};
 			if (!ex) {
-				cout << buf << " Incorect!" << endl;
+				int h=0;
+				for(h=0;h<incor.size();h++){
+					if(incor[h].first==buf){
+						incor[h].second++;
+						break;
+					}
+				}
+				if(h==incor.size())
+						incor.push_back(make_pair(buf,1));
 				fl = true;
 			}
-			for (j = 0; j <= SIZE; j++)
+			for (j = 0; j <= PairSIZE; j++)
 				if (pairs[j] == -1){
-					cout << buf << " Undiscovered!" << endl;
 					pairs[j]++;
+					fails[j]++;
 					fl = true;
 				}
 		}else
 		i++;
 	}
-	for (int l = 0; l < SIZE; l++)
+	for (int l = 0; l < PairSIZE; l++){
 		if (pairs[l] != 0){
-			cout << "expected: " << ClosedPairedMass[l] << endl;
+			cout << "expected: " << ClosedPairedMass[l]<<" "<<pairs[l]<<" Times"<< endl;
 			fl = true;
 		}
+		if(fails[l]!=0){
+			cout  << PairedMass[l]<<" Undiscovered! "<<fails[l]<<" Times"<< endl;
+			fl = true;
+		}
+	}
+	for(int h=0;h<incor.size();h++){
+		cout<<incor[h].first<<" Incorect! "<<incor[h].second<<" Tilmes"<< endl;			
+	}
 	if (!fl)
 	cout << "Corect!";
 	_gettch();

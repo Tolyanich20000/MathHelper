@@ -16,7 +16,8 @@
 #include <windows.h>
 #include <conio.h>
 #include <time.h>
-
+#include <stdlib.h>
+#include <vector>
 
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

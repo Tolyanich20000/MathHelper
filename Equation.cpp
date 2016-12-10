@@ -5,7 +5,7 @@ Equation::Equation(double a) { this->a = a; };
 Equation::Equation(){};
 Equation::~Equation(){};
 void Equation::Solve() {
-		cout << "Корень " << -a;
+		cout << "Корень " << -a<<endl;
 	};
 
 Equation2::Equation2(double a, double b) { this->a = a; this->b = b; };
@@ -172,22 +172,23 @@ void yrov::CoofAndResh(string equation) {
 		}
 	}
 	//cout << endl <<"a="<< abc.a << endl << "b=" << abc.b << endl << "c=" << abc.c<<endl<< "d="<< abc.d << endl;
+	Equation* ur=new Equation;
+	bool fl=1;
 	if (abc.a == 0 && abc.b==0) {
 		cout<<endl<<equation<<" - Линейное уровнение\n\n";
 		if(abc.c!=0){
-		Equation ur(abc.d/abc.c);
-		ur.Solve();
+		ur=new Equation(abc.d/abc.c);
 		}
-		else cout<<"Х-Любое число\n";
+		else {cout<<"Х-Любое число\n"; fl=0;};
 	}
 	else if (abc.a==0) {
 		cout<<endl<<equation<<" - Квадратное уровнение\n\n";
-		Equation2 ur(abc.c/abc.b, abc.d / abc.b);
-		ur.Solve();
+		ur=new Equation2(abc.c/abc.b, abc.d / abc.b);
 	}
 	else {
 		cout<<endl<<equation<<" - Кубическое уровнение\n\n";
-		Equation3 ur(abc.b/abc.a, abc.c/abc.a, abc.d/abc.a);
-		ur.Solve();
+		ur=new Equation3(abc.b/abc.a, abc.c/abc.a, abc.d/abc.a);
 	}
+	if (fl)
+	ur->Solve();
 }
